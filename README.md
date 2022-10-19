@@ -1,6 +1,8 @@
 # From Play to Policy: Conditional Behavior Generation from Uncurated Robot Data
 [[Paper]](https://arxiv.org/abs/2210.10047) [[Project Website]](https://play-to-policy.github.io/)
 
+https://play-to-policy.github.io/mfiles/env/real-kitchen/intro_video.mp4
+
 This repo contains code for reproducing sim environment experiments, and the real-world robotic experiment gym environment, and data collection tools.
 
 Datasets for the simulated environments will be uploaded soon.
