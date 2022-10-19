@@ -1,0 +1,28 @@
+name: carla-multipath-town04-merge-v0
+args: []
+kwargs:
+  encoder_device: cuda:0
+obs_dim: 512
+goal_dim: 2
+action_dim: 2
+action_min: [-1, -1]
+action_max: [1, 1]
+
+load_dir: /path/to/save_directory
+
+workspace:
+  _target_: workspaces.carla_multipath.CarlaMultipathWorkspace
+
+dataset_fn:
+  _target_: dataloaders.trajectory_loader.get_carla_trajectory_dataset
+  data_directory: ${env_vars.datasets.carla_multipath_town04_merge}
+  window_size: ${window_size}
+  goal_conditional: ${goal_conditional}
+  future_seq_len: ${goal_seq_len}
+
+goal_fn:
+  _target_: envs.carla.goals.get_goal_fn_town04_merge
+  goal_conditional: ${goal_conditional}
+  goal_seq_len: ${goal_seq_len}
+  seed: ${seed}
+  train_fraction: ${train_fraction}

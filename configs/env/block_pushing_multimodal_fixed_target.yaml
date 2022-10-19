@@ -1,0 +1,30 @@
+name: BlockPushMultimodal-v0
+obs_dim: 16
+action_dim: 2
+goal_dim: 4
+action_min: null
+action_max: null
+
+load_dir: /home/jeff/workspace/cbet-clean/exp_local/2022.10.19/005001_blockpush
+
+workspace:
+  _target_: workspaces.block_push.BlockPushWorkspace
+
+dataset_fn:
+  _target_: dataloaders.trajectory_loader.get_push_train_val
+  data_directory: ${env_vars.datasets.multimodal_push_fixed_target}
+  window_size: ${window_size}
+  goal_conditional: ${goal_conditional}
+  future_seq_len: ${goal_seq_len}
+  only_sample_tail: True
+  transform:
+    # NOTE: blockpush_mask_targets: for future conditional
+    # mask out targets in obs; only keep block positions in future obs conditionals
+    _target_: dataloaders.augmentations.blockpush_mask_targets
+
+goal_fn:
+  _target_: envs.block_pushing.goals.get_goal_fn
+  goal_conditional: ${goal_conditional}
+  goal_seq_len: ${goal_seq_len}
+  seed: ${seed}
+  train_fraction: ${train_fraction}

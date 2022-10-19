@@ -1,0 +1,5 @@
+_target_: models.mlp.MLP
+input_dim: ${env.obs_dim}
+hidden_dim: 128
+hidden_depth: 2
+output_dim: 512

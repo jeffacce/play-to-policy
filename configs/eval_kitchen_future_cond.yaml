@@ -1,0 +1,49 @@
+defaults:
+  - _self_
+  - encoder: identity
+  - action_ae: discretizers/k_means_kitchen_best
+  - env: relay_kitchen_traj
+  - state_prior: mingpt_kitchen_future_cond_best
+  - env_vars: env_vars
+
+lazy_init_models: True
+
+device: cuda:0
+seed: 42
+train_fraction: 0.95  # for split replication
+load_dir: ${env.load_dir}
+# Length of history
+window_size: 3
+goal_conditional: future
+goal_seq_len: 10
+
+# Environment running setup
+num_eval_goals: 20
+num_eval_eps: 5
+action_batch_size: 1
+num_eval_steps: 300
+use_state_prior: True
+enable_offsets: True
+enable_render: False
+
+data_parallel: False
+flatten_obs: False
+
+# Plotting setup
+plot_interactions: False
+start_from_seen: False
+record_video: False
+
+# Wandb setup
+experiment: cbet_repro_test
+project: kitchen_eval
+
+hydra:
+  job:
+    override_dirname: ${experiment}
+    chdir: True
+  run:
+    dir: ./exp_local/${now:%Y.%m.%d}/${now:%H%M%S}_${experiment}
+  sweep:
+    dir: ./exp/${now:%Y.%m.%d}/${now:%H%M}_${experiment}
+    subdir: ${hydra.job.num}

@@ -1,0 +1,31 @@
+name: kitchen-all-v0
+args: []
+kwargs: {}
+obs_dim: 60
+goal_dim: 7
+action_dim: 9
+action_min: null
+action_max: null
+
+load_dir: /path/to/save_directory
+
+workspace:
+  _target_: workspaces.adept_kitchen.AdeptKitchenWorkspace
+
+dataset_fn:
+  _target_: dataloaders.trajectory_loader.get_relay_kitchen_train_val
+  data_directory: ${env_vars.datasets.relay_kitchen}
+  window_size: ${window_size}
+  goal_conditional: ${goal_conditional}
+  future_seq_len: ${goal_seq_len}
+  transform:
+    _target_: dataloaders.augmentations.random_dropout
+    dropout: [0, 0, 0, 0.1]
+    drop_whole: True
+
+goal_fn:
+  _target_: envs.kitchen.goals.get_goal_fn
+  goal_conditional: ${goal_conditional}
+  goal_seq_len: ${goal_seq_len}
+  seed: ${seed}
+  train_fraction: ${train_fraction}
