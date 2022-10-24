@@ -44,7 +44,7 @@ class Workspace:
             self._init_state_prior()
 
         if self.cfg.goal_conditional:
-            self.goal_fn = hydra.utils.instantiate(self.cfg.env.goal_fn)
+            self.goal_fn = hydra.utils.instantiate(self.cfg.env.goal_fn, cfg)
         self.wandb_run = wandb.init(
             dir=self.work_dir,
             project=cfg.project,

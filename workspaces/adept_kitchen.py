@@ -18,12 +18,14 @@ import envs
 from dataloaders.trajectory_loader import RelayKitchenTrajectoryDataset
 from utils import get_split_idx
 
-relay_traj = RelayKitchenTrajectoryDataset(
-    "/path/to/relay_kitchen_dataset", onehot_goals=True
-)
-
 
 class AdeptKitchenWorkspace(base.Workspace):
+    def __init__(self, cfg):
+        self.relay_traj = RelayKitchenTrajectoryDataset(
+            cfg.env_vars.datasets.relay_kitchen, onehot_goals=True
+        )
+        super().__init__(cfg)
+
     def _setup_plots(self):
         plt.ion()
         obs_mapper_path = (
@@ -108,11 +110,11 @@ class AdeptKitchenWorkspace(base.Workspace):
         print("Incomplete tasks ", set(self.env.tasks_to_complete))
         if goal_idx is not None:
             train_idx, val_idx = get_split_idx(
-                len(relay_traj),
+                len(self.relay_traj),
                 seed=self.cfg.seed,
                 train_fraction=self.cfg.train_fraction,
             )
-            _, _, _, onehot_labels = relay_traj[train_idx[goal_idx]]  # T x 7
+            _, _, _, onehot_labels = self.relay_traj[train_idx[goal_idx]]  # T x 7
             expected_mask = onehot_labels.max(0).values.bool().numpy()
             tasks = np.array(self.env.ALL_TASKS)
             expected_tasks = tasks[expected_mask].tolist()

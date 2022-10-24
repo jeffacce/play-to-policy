@@ -122,7 +122,8 @@ def add_noise_to_action(
     return result
 
 
-Town10_spawns = np.load("/path/to/envs/carla/Town10_spawns.npy")
+# assuming working dir is overwritten by hydra to ./exp_local/{date}/{time}_{exp_name}
+Town10_spawns = np.load("../../../envs/carla/Town10_spawns.npy")
 Town10_spawns = [deserialize_transform(t) for t in Town10_spawns]
-Town04_spawns = np.load("/path/to/envs/carla/Town04_spawns.npy")
+Town04_spawns = np.load("../../../envs/carla/Town04_spawns.npy")
 Town04_spawns = [deserialize_transform(t) for t in Town04_spawns]

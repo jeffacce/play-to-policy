@@ -7,13 +7,14 @@ from . import OBS_ELEMENT_GOALS, OBS_ELEMENT_INDICES
 
 
 def get_goal_fn(
+    cfg,
     goal_conditional: Optional[str] = None,
     goal_seq_len: Optional[int] = None,
     seed: Optional[int] = None,
     train_fraction: Optional[float] = None,
 ):
     relay_traj = RelayKitchenTrajectoryDataset(
-        "/path/to/relay_kitchen_dataset", onehot_goals=True
+        cfg.env_vars.datasets.relay_kitchen, onehot_goals=True
     )
     train_idx, val_idx = get_split_idx(
         len(relay_traj),

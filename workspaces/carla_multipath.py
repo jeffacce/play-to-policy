@@ -8,11 +8,12 @@ from workspaces import base
 from utils import get_split_idx
 from dataloaders.trajectory_loader import CarlaTrajectoryDataset
 
-carla_traj = CarlaTrajectoryDataset("/path/to/carla_dataset", onehot_goals=True)
-
 
 class CarlaMultipathWorkspace(base.Workspace):
     def __init__(self, cfg):
+        self.carla_traj = CarlaTrajectoryDataset(
+            cfg.env_vars.datasets.carla_multipath_town04_merge, onehot_goals=True
+        )
         super().__init__(cfg)
 
     def _setup_plots(self):
@@ -35,11 +36,11 @@ class CarlaMultipathWorkspace(base.Workspace):
     def _report_result_upon_completion(self, goal_idx=None):
         if goal_idx is not None:
             train_idx, val_idx = get_split_idx(
-                len(carla_traj),
+                len(self.carla_traj),
                 seed=self.cfg.seed,
                 train_fraction=self.cfg.train_fraction,
             )
-            _, _, _, onehot_labels = carla_traj[train_idx[goal_idx]]
+            _, _, _, onehot_labels = self.carla_traj[train_idx[goal_idx]]
             condition_on_end_overlap = (goal_idx % 3) == 0
             routes_used = self.env.last_info["routes_used"]
             expected_route = onehot_labels.max(0).values.bool().numpy()

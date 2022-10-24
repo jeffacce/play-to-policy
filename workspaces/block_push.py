@@ -16,8 +16,6 @@ import envs
 from dataloaders.trajectory_loader import PushTrajectoryDataset
 from utils import get_split_idx
 
-push_traj = PushTrajectoryDataset("/path/to/block_push_dataset", onehot_goals=True)
-
 
 class MaskOutTarget(torch.nn.Module):
     def __init__(self):
@@ -30,6 +28,9 @@ class MaskOutTarget(torch.nn.Module):
 
 class BlockPushWorkspace(base.Workspace):
     def __init__(self, cfg):
+        self.push_traj = PushTrajectoryDataset(
+            cfg.env_vars.datasets.multimodal_push_fixed_target, onehot_goals=True
+        )
         super().__init__(cfg)
         # NOTE: only for future conditional
         self.obs_encoding_net = MaskOutTarget()
@@ -49,11 +50,11 @@ class BlockPushWorkspace(base.Workspace):
     def _report_result_upon_completion(self, goal_idx=None):
         if goal_idx is not None:
             train_idx, val_idx = get_split_idx(
-                len(push_traj),
+                len(self.push_traj),
                 seed=self.cfg.seed,
                 train_fraction=self.cfg.train_fraction,
             )
-            _, _, _, onehot_goals = push_traj[train_idx[goal_idx]]
+            _, _, _, onehot_goals = self.push_traj[train_idx[goal_idx]]
             onehot_mask, first_frame = onehot_goals.max(0)
             goals = [(first_frame[i], i) for i in range(4) if onehot_mask[i]]
             goals = sorted(goals, key=lambda x: x[0])

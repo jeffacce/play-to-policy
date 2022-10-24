@@ -5,15 +5,17 @@ from typing import Optional
 from dataloaders.trajectory_loader import PushTrajectoryDataset
 from utils import get_split_idx
 
-push_traj = PushTrajectoryDataset("/path/to/block_push_dataset", onehot_goals=True)
-
 
 def get_goal_fn(
+    cfg,
     goal_conditional: Optional[str] = None,
     goal_seq_len: Optional[int] = None,
     seed: Optional[int] = None,
     train_fraction: Optional[float] = None,
 ):
+    push_traj = PushTrajectoryDataset(
+        cfg.env_vars.datasets.multimodal_push_fixed_target, onehot_goals=True
+    )
     train_idx, val_idx = get_split_idx(
         len(push_traj),
         seed=seed,
