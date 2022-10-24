@@ -4,7 +4,6 @@ import torchvision
 import numpy as np
 from typing import Tuple, Callable
 from pathlib import Path
-from models.libraries.r3m import load_r3m
 
 
 ROBOT_IP_ADDR = "10.19.229.238"
@@ -52,9 +51,7 @@ def get_resnet18_encoder(
 ) -> Tuple[torch.nn.Module, Callable]:
     model_weights_path = Path(model_weights_path)
     # return encoder, normalization
-    if encoder_type == "r3m":
-        return (load_r3m("resnet18").eval(), lambda x: x)
-    elif encoder_type == "imagenet":
+    if encoder_type == "imagenet":
         resnet = torchvision.models.resnet18(pretrained=True)
         return (
             torch.nn.Sequential(*list(resnet.children())[:-1]).eval(),

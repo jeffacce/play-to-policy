@@ -54,13 +54,6 @@ try:
         reward_threshold=1.0,
     )
 
-    register(
-        id="kitchen-vision-all-v0",
-        entry_point="envs.kitchen.v0:KitchenVisionAllV0",
-        max_episode_steps=280,
-        reward_threshold=1.0,
-    )
-
 except ImportError:
     logging.warning("Kitchen not installed, skipping")
 

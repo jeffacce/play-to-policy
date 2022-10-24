@@ -1,4 +1,4 @@
-from envs.kitchen import KitchenBase, KitchenVisionBase
+from envs.kitchen import KitchenBase
 
 
 class KitchenMicrowaveKettleBottomBurnerLightV0(KitchenBase):
@@ -17,8 +17,4 @@ class KitchenKettleMicrowaveLightSliderV0(KitchenBase):
 
 
 class KitchenAllV0(KitchenBase):
-    TASK_ELEMENTS = KitchenBase.ALL_TASKS
-
-
-class KitchenVisionAllV0(KitchenVisionBase):
     TASK_ELEMENTS = KitchenBase.ALL_TASKS

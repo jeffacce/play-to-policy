@@ -1,7 +1,5 @@
 name: cbet
 channels:
-  - fair-robotics
-  - aihabitat
   - pytorch
   - conda-forge
   - defaults
@@ -31,7 +29,7 @@ dependencies:
       - hydra-core==1.2.0
       - ipdb==0.13.9
       - imageio==2.13.3
-      - wandb==0.12.7
+      - wandb==0.13.4
       - carla==0.9.13
       - shapely==1.8.1.post1
       - networkx==2.8
@@ -48,3 +46,4 @@ dependencies:
       - gdown==4.5.1
       - prettytable==3.3.0
       - bezier==2021.2.12
+      - pynvml==11.4.1

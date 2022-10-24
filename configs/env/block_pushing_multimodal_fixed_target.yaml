@@ -5,7 +5,7 @@ goal_dim: 4
 action_min: null
 action_max: null
 
-load_dir: /home/jeff/workspace/cbet-clean/exp_local/2022.10.19/005001_blockpush
+load_dir: /path/to/save_directory
 
 workspace:
   _target_: workspaces.block_push.BlockPushWorkspace

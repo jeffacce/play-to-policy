@@ -1,11 +1,10 @@
 """Environments using kitchen and Franka robot."""
 import logging
 import adept_envs
-from adept_envs.franka import KitchenTaskRelaxV1
+from adept_envs.franka.kitchen_multitask_v0 import KitchenTaskRelaxV1
 import os
 import numpy as np
 import torch
-from models.libraries.r3m import load_r3m
 import einops
 
 
@@ -155,30 +154,3 @@ class KitchenBase(KitchenTaskRelaxV1):
             )
             start = end_idx + 1
         return seqs
-
-
-class KitchenVisionBase(KitchenBase):
-    """Base class for kitchen environments with vision."""
-
-    def __init__(
-        self,
-        dataset_url=None,
-        ref_max_score=None,
-        ref_min_score=None,
-        device="cpu",
-        **kwargs
-    ):
-        # initialize r3m encoder
-        self.encoder: torch.nn.Module = load_r3m("resnet18").eval().to(device)
-        self.device = device
-        super(KitchenVisionBase, self).__init__(**kwargs)
-
-    def _get_obs(self):
-        state = super(KitchenVisionBase, self)._get_obs()
-        img = self.render(mode="rgb_array", size=(224, 224))
-        img = torch.from_numpy(img.copy())
-        img = einops.rearrange(img, "H W C -> 1 C H W").to(self.device)
-        with torch.no_grad():
-            embedding = self.encoder(img).cpu().squeeze(0).numpy()
-        obs = np.concatenate([embedding, state[:7]])
-        return obs

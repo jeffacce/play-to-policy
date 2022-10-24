@@ -3,7 +3,7 @@ defaults:
   - encoder: identity
   - action_ae: discretizers/k_means_carla_best
   - env: carla_multipath_merge_town04_traj_rep
-  - state_prior: mingpt_blockpush_carla_cond_best
+  - state_prior: mingpt_carla_future_cond_best
   - env_vars: env_vars
 
 lazy_init_models: True
@@ -35,8 +35,8 @@ start_from_seen: False
 record_video: False
 
 # Wandb setup
-experiment: cbet_repro_test
-project: carla_eval
+project: cbet_repro_test
+experiment: carla_eval
 
 hydra:
   job:
