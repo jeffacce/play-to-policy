@@ -1,9 +1,11 @@
 # From Play to Policy: Conditional Behavior Generation from Uncurated Robot Data
-[[Paper]](https://arxiv.org/abs/2210.10047) [[Project Website]](https://play-to-policy.github.io/)
+[[Paper]](https://arxiv.org/abs/2210.10047) [[Project Website]](https://play-to-policy.github.io/) [[Data]](https://osf.io/q3dx2)
 
 [Zichen Jeff Cui](https://jeffcui.com/), Yibin Wang, [Nur Muhammad (Mahi) Shafiullah](https://mahis.life), and [Lerrel Pinto](https://www.lerrelpinto.com/), New York University
 
-This repo contains code for reproducing sim environment experiments, and the real-world robotic experiment gym environment, and data collection tools. Datasets for the simulated environments will be uploaded soon.
+This repo contains code for reproducing sim environment experiments, and the real-world robotic experiment gym environment, and data collection tools. Datasets for the simulated environments will be uploaded to [this OSF link](https://osf.io/q3dx2).
+
+
 
 ## Getting started
 The following assumes our current working directory is the root folder of this project repository; tested on Ubuntu 20.04 LTS (amd64).
@@ -32,7 +34,7 @@ The following assumes our current working directory is the root folder of this p
   ```
 
 ### Getting the training datasets
-Datasets used for training will be uploaded soon.
+Datasets used for training will be uploaded to [this OSF link](https://osf.io/q3dx2).
 - Download and unzip the datasets.
 - In `./config/env_vars/env_vars.yaml`, set the dataset paths to the unzipped directories.
   - `carla_multipath_town04_merge`: CARLA environment
@@ -93,7 +95,7 @@ See below for detailed steps for each environment.
   (Evaluation requires including this repository in `ASSET_PATH`.)
 
 ### Speeding up evaluation
-- Rendering can be disabled for the kitchen and block pushing environments: set `enable_render: False` in `configs/eval_kitchen.yaml`, `configs/eval_blockpush.yaml`.
+- Rendering can be disabled for the kitchen and block pushing environments: set `enable_render: False` in `configs/eval_kitchen_future_cond.yaml`, `configs/eval_blockpush_future_cond.yaml`.
   
   (This option does not affect CARLA, as it requires rendering for RGB camera observations.)
-- CARLA (Unreal Engine 4) renders on GPU 0 by default. If multiple GPUs are available, running the evaluated model on other GPUs can speed up evaluation: e.g. set `device: cuda:1` in `configs/eval_carla.yaml`.
+- CARLA (Unreal Engine 4) renders on GPU 0 by default. If multiple GPUs are available, running the evaluated model on other GPUs can speed up evaluation: e.g. set `device: cuda:1` in `configs/eval_carla_future_cond.yaml`.
