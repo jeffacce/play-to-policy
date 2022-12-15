@@ -32,6 +32,19 @@ def get_goal_fn(
         def goal_fn(state, goal_idx, frame_idx):
             # assuming at this point the state hasn't been masked yet by the obs_encoder
             obs, _, _, _ = push_traj[train_idx[goal_idx]]
+            obs = obs.clone()
+            # bugfix: the targets spawn in two possible configurations (either red or green on top)
+            # so here we need to actually look at the targets to condition on the correct positions
+            block_idx = [[0, 1], [3, 4]]
+            target_idx = [[10, 11], [13, 14]]
+            tgt_0_pos_state = torch.Tensor(state[target_idx[0]])
+            tgt_0_pos_goal = obs[-1, target_idx[0]]
+            goals_flipped = (tgt_0_pos_goal - tgt_0_pos_state).norm() > 0.2
+            if goals_flipped:
+                temp = obs[:, block_idx[0]].clone()
+                obs[:, block_idx[0]] = obs[:, block_idx[1]]
+                obs[:, block_idx[1]] = temp
+
             obs[..., [2, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]] = 0
             # obs = obs[-goal_seq_len:]
             obs = obs[-1:].repeat(goal_seq_len, 1)
