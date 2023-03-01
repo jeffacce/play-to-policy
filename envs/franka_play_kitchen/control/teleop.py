@@ -37,10 +37,6 @@ class Teleop:
         self.controller.set_flip_axes(True, False, True)  # flip x, z axes
         self.controller.set_permute_axes(2, 0, 1)  # zxy -> xyz
 
-        self.permute_rotation = np.eye(3)
-        self.flip_rotation = np.diag([-1, -1, -1])
-        self.rot_transform = self.permute_rotation @ self.flip_rotation
-
         self.slow_mode = True
         self.running = False
         self.freeze_pos = False
@@ -100,7 +96,7 @@ class Teleop:
     def update_user_state(self):
         affine = self.controller.get_pose()
         self.user_pos = torch.Tensor(affine[:3, 3])
-        self.user_rot = self.rot_transform @ affine[:3, :3] @ self.rot_transform.T
+        self.user_rot = affine[:3, :3]
         self.buttons = self.controller.get_button_state()
         self.falling = self.fall_protection and self.controller.is_likely_falling()
         self.trigger = self.controller.get_trigger_state()
